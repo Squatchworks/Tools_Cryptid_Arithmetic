@@ -13,6 +13,16 @@ wxEND_EVENT_TABLE()
 
 Window::Window(const wxString& title) : wxFrame(nullptr, wxID_ANY, title, wxPoint(100, 100), wxSize(490, 380))
 {
+	// --- Branding Colors ---
+	wxColour bgDark(18, 18, 20);        // near-black background
+	wxColour accentGreen(30, 180, 100); // forest green operators
+	wxColour accentAmber(220, 160, 40); // amber numbers
+	wxColour accentRed(200, 50, 50);    // red for CLR/DEL
+	wxColour textLight(220, 220, 210);  // off-white text
+
+	this->SetBackgroundColour(bgDark);
+	this->SetTitle("Cryptid Arithmetic");
+
 	Button_Factory& buttonFactory = Button_Factory::GetInstance(this);
 
 	TextBox = buttonFactory.GetInstance().CreateTextBox(this, wxPoint(210, 10), wxSize(250, 200));
@@ -42,11 +52,41 @@ Window::Window(const wxString& title) : wxFrame(nullptr, wxID_ANY, title, wxPoin
 	ParenthesesOpen = buttonFactory.GetInstance().CreatNumberButton(this, "(", wxPoint(360, 210), wxSize(50, 50));
 	ParenthesesClose = buttonFactory.GetInstance().CreatNumberButton(this, " )", wxPoint(410, 210), wxSize(50, 50));
 
+	// --- Apply Colors ---
+	// Number buttons — amber
+	for (wxButton* btn : { ZeroButton, OneButton, TwoButton, ThreeButton,
+						   FourButton, FiveButton, SixButton, SevenButton,
+						   EightButton, NineButton, PointButton, ParenthesesOpen, ParenthesesClose })
+	{
+		btn->SetBackgroundColour(wxColour(40, 38, 30));
+		btn->SetForegroundColour(accentAmber);
+	}
+
+	// Operator buttons — green
+	for (wxButton* btn : { PlusButton, MinusButton, MultiplyButton, DivideButton,
+						   ModuloButton, MakeNegativeButton, SinButton, CosButton, TanButton })
+	{
+		btn->SetBackgroundColour(wxColour(20, 40, 30));
+		btn->SetForegroundColour(accentGreen);
+	}
+
+	// Equal button — bright green
+	EqualButton->SetBackgroundColour(wxColour(20, 140, 70));
+	EqualButton->SetForegroundColour(textLight);
+
+	// CLR / DEL — red
+	ClearButton->SetBackgroundColour(wxColour(60, 20, 20));
+	ClearButton->SetForegroundColour(accentRed);
+	DeleteButton->SetBackgroundColour(wxColour(60, 20, 20));
+	DeleteButton->SetForegroundColour(accentRed);
+
+	// TextBox styling
+	TextBox->SetBackgroundColour(wxColour(12, 12, 14));
+	TextBox->SetForegroundColour(textLight);
+
 	TextOutput = std::cout.rdbuf();
 	std::cout.rdbuf(TextBox);
 }
-
-
 
 Window::~Window()
 {
@@ -95,7 +135,6 @@ void Window::EqualButtonClicked(wxCommandEvent& evt)
 		TextBox->SetFocus();
 	}
 }
-
 
 void Window::ClearButtonClicked(wxCommandEvent& evt)
 {
