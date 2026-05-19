@@ -44,17 +44,16 @@ std::queue<std::string> Calc_processor::ProcessEquation(const wxString& equation
             }
             else if (token == ")" || token == " )" || token == ") ")
             {
-                while(operatorStack.top() != "(" && operatorStack.top() != " (" && operatorStack.top() != "( ")
+                while (!operatorStack.empty() && operatorStack.top() != "(" && operatorStack.top() != " (" && operatorStack.top() != "( ")
                 {
-                    if (operatorStack.empty())
-                    {
-                        throw std::runtime_error("Mismatched parentheses");
-                    }
                     outputQueue.push(operatorStack.top());
                     operatorStack.pop();
-                } 
-
-                operatorStack.pop(); //discarding left parentheses
+                }
+                if (operatorStack.empty())
+                {
+                    throw std::runtime_error("Mismatched parentheses");
+                }
+                operatorStack.pop(); // discard left parenthesis
                 if (!operatorStack.empty() && checkFunction(operatorStack.top()))
                 {
                     outputQueue.push(operatorStack.top());
@@ -93,31 +92,35 @@ bool Calc_processor::NumCheck(const std::string& Number)
         return false;
     }
 }
+
 bool Calc_processor::checkOperator(const std::string& operater)
 {
     return operater == "+" || operater == "-" || operater == "*" || operater == "/" || operater == "%";
 }
+
 int Calc_processor::CheckPrecedence(const std::string& operater)
 {
-    if (operater == '*' || operater == '/' || operater == '%')
+    if (operater == "*" || operater == "/" || operater == "%")
         return 2;
-    else if (operater == '+' || operater == '-')
+    else if (operater == "+" || operater == "-")
         return 1;
     return 0;
 }
+
 bool Calc_processor::isLeftAssociative(const std::string& operater)
 {
-    return operater == '+' || operater == '-' || operater == '*' || operater == '/' || operater == '%';
+    return operater == "+" || operater == "-" || operater == "*" || operater == "/" || operater == "%";
 }
+
 bool Calc_processor::checkFunction(const std::string& function)
 {
     return function == "Sin " || function == "Cos " || function == "Tan ";
 }
+
 bool Calc_processor::checkUnaryOperator(const std::string& character)
 {
     return character == "u-";
 }
-
 
 double Calc_processor::applyFunction(const std::string& function, double value)
 {
@@ -126,6 +129,7 @@ double Calc_processor::applyFunction(const std::string& function, double value)
     else if (function == "Tan ") return std::tan(value);
     else throw std::runtime_error("Unknown function: " + function);
 }
+
 double Calc_processor::applyUnaryOperator(const std::string& operater, double number)
 {
     if (operater == "u-") return -number;
@@ -133,6 +137,7 @@ double Calc_processor::applyUnaryOperator(const std::string& operater, double nu
     else
         throw std::runtime_error("Unknown unary operator: " + operater);
 }
+
 double Calc_processor::applyOperator(const std::string& operater, double Num1, double Num2)
 {
     if (operater == "+") return Num1 + Num2;
@@ -142,6 +147,7 @@ double Calc_processor::applyOperator(const std::string& operater, double Num1, d
     else if (operater == "%") return fmod(Num1,Num2);
     else throw std::runtime_error("Unknown operator: " + operater);
 }
+
 double Calc_processor::evaluateRPNequation(std::queue<std::string>& outputqueue)
 {
     std::stack<double> EvaluationStack; 
@@ -182,7 +188,7 @@ double Calc_processor::evaluateRPNequation(std::queue<std::string>& outputqueue)
     catch (const std::exception& error)
     {
         wxMessageBox(error.what(), "ERROR", wxOK | wxICON_ERROR);
-        return NULL;
+        return 0.0;
         throw;
     }
 }
