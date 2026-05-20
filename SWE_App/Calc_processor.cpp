@@ -77,12 +77,12 @@ std::queue<std::string> Calc_processor::ProcessEquation(const wxString& equation
         wxMessageBox(error.what(), "ERROR", wxOK | wxICON_ERROR);
         throw;
     }
-    
+
 }
 
 bool Calc_processor::NumCheck(const std::string& Number)
 {
-    try 
+    try
     {
         std::stod(Number);
         return true;
@@ -144,13 +144,13 @@ double Calc_processor::applyOperator(const std::string& operater, double Num1, d
     else if (operater == "-") return Num1 - Num2;
     else if (operater == "*") return Num1 * Num2;
     else if (operater == "/") return Num1 / Num2;
-    else if (operater == "%") return fmod(Num1,Num2);
+    else if (operater == "%") return fmod(Num1, Num2);
     else throw std::runtime_error("Unknown operator: " + operater);
 }
 
 double Calc_processor::evaluateRPNequation(std::queue<std::string>& outputqueue)
 {
-    std::stack<double> EvaluationStack; 
+    std::stack<double> EvaluationStack;
     try
     {
         while (!outputqueue.empty())
@@ -206,7 +206,7 @@ std::vector<std::string> Calc_processor::tokenizeEquation(const wxString& equati
         {
             wxString _token = tokenizer.GetNextToken();
             std::string token = std::string(_token.mb_str());
-            
+
             if (token == " ") continue;
             else if (NumCheck(token) || token == "(" || token == ")" || token == ") ")
             {
