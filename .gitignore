@@ -361,3 +361,17 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# ---- vcpkg manifest-mode ----
+# Project-local install of vcpkg dependencies (regenerated from vcpkg.json on build)
+vcpkg_installed/
+
+# vcpkg buildtrees / packages / downloads (if any leak into the project folder)
+vcpkg/buildtrees/
+vcpkg/packages/
+vcpkg/downloads/
+
+# ---- Project-specific releases ----
+# Local release-packaging staging folders (the GitHub Release is the source of truth)
+/Releases/
+*.zip
