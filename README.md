@@ -1,78 +1,147 @@
-# 🧮 Cryptid Arithmetic
+# Cryptid Arithmetic
 
-> A C++ desktop calculator built with wxWidgets — featuring a full expression parser, operator precedence, trig functions, and error handling.
+![Language](https://img.shields.io/badge/language-C%2B%2B17-blue)
+![Platform](https://img.shields.io/badge/platform-Windows%20x64-lightgrey)
+![GUI](https://img.shields.io/badge/GUI-wxWidgets%203.2-green)
+![Build](https://img.shields.io/badge/build-vcpkg%20manifest-orange)
+![License](https://img.shields.io/badge/license-MIT-brightgreen)
 
-**By [Jacob Blackburn](https://github.com/Squatchworks) · SquatchWorks**
+A Windows desktop calculator built with **C++17** and **wxWidgets 3.2**. Four-function arithmetic, input validation, and a clean GUI — built with vcpkg manifest mode for reproducible builds.
+
+> Part of the Squatchworks portfolio. Developed by [Jacob Blackburn](https://github.com/Squatchworks).
+
+---
+
+## Download
+
+Grab the latest release from the [Releases page](https://github.com/Squatchworks/Tools_Cryptid_Arithmetic/releases).
+
+- **`CryptidArithmetic-Setup-v1.2.0.exe`** — Inno Setup installer (recommended). Installs to `Program Files`, adds Start Menu shortcut, registers uninstaller.
+- **`CryptidArithmetic-v1.2.0-win64.zip`** — Portable build. Unzip and run `CryptidArithmetic.exe` directly. No install required.
+
+Both include the wxWidgets runtime DLLs — no separate downloads needed.
 
 ---
 
 ## Features
 
-- Full mathematical expression evaluation (not just button-by-button)
-- Correct operator precedence (`*` and `/` before `+` and `-`)
-- Shunting-Yard algorithm converts infix expressions to Reverse Polish Notation (RPN)
-- Trig functions: **Sin**, **Cos**, **Tan**
-- Unary minus support (e.g. `-5 * 3`)
-- Parenthesis grouping
-- Division and modulo by zero error handling
-- Clear (`CLR`) and Delete (`DEL`) controls
+- Four-function arithmetic: addition, subtraction, multiplication, division
+- Input validation with friendly error messages (divide-by-zero, malformed input, overflow guards)
+- Clean wxWidgets GUI with button grid + display field
+- Single-window layout, resizable, no external runtime dependencies beyond the bundled wx DLLs
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Language | C++ |
-| GUI Framework | [wxWidgets](https://www.wxwidgets.org/) |
-| Architecture | Singleton processor, Factory pattern for buttons |
-| Build System | Visual Studio (`.sln` / `.vcxproj`) |
+| Layer            | Tech                                    |
+|------------------|-----------------------------------------|
+| Language         | C++17                                   |
+| GUI Framework    | wxWidgets 3.2.5                         |
+| Build System     | MSBuild (Visual Studio 2022)            |
+| Package Manager  | vcpkg (manifest mode)                   |
+| Compiler         | MSVC v143 (Visual Studio 17.x)          |
+| Runtime          | Multi-threaded DLL (`/MD`)              |
+| Installer        | Inno Setup 6                            |
+| Target Platform  | Windows 10/11 x64                       |
 
 ---
 
 ## Architecture
 SWE_App/
-├── App.cpp / App.h — wxApp entry point
-├── Window.cpp / Window.h — Main window and layout
-├── Button_Factory.cpp / .h — Factory pattern for button creation
-├── Calc_processor.cpp / .h — Expression parser and RPN evaluator (core logic)
+├── App.cpp / App.h # wxApp entry point — bootstraps the main window
+├── Window.cpp / Window.h # Main wxFrame — layout, event binding, display
+├── Button_Factory.cpp / .h # Factory for the calculator button grid
+└── Calc_processor.cpp / .h # Arithmetic logic + input validation
 
-The `Calc_processor` is a **Singleton** that handles all math logic independently from the UI layer. Expressions are tokenized, converted to RPN via the Shunting-Yard algorithm, then evaluated on a stack.
+The UI layer (`Window`, `Button_Factory`) is decoupled from the arithmetic layer (`Calc_processor`), so the calculation engine can be swapped or unit-tested independently of wxWidgets.
 
 ---
 
 ## How to Build
 
-**Requirements:**
-- Visual Studio 2022 (or compatible)
-- wxWidgets 3.x installed and configured
+### Prerequisites
 
-**Steps:**
-1. Clone the repo
-2. Open `SWE_App.sln` in Visual Studio
-3. Set wxWidgets paths in project properties if needed
-4. Build → Run
+- Visual Studio 2022 with the **Desktop development with C++** workload
+- [vcpkg](https://github.com/microsoft/vcpkg) installed and integrated with Visual Studio (`vcpkg integrate install`)
+- Git (or GitHub Desktop)
+
+### Build steps
+
+1. Clone the repo: git clone https://github.com/Squatchworks/Tools_Cryptid_Arithmetic.git
+2. Open `SWE_App.sln` in Visual Studio 2022.
+3. Set configuration to **Release | x64**.
+4. **Build → Build Solution** (Ctrl+Shift+B).
+
+vcpkg manifest mode will read `vcpkg.json` and automatically install wxWidgets the first time you build (≈15–20 minutes on first run, cached after that). The output binary lands at `x64\Release\CryptidArithmetic.exe`.
+
+### vcpkg manifest
+
+`vcpkg.json` pins the dependency set so anyone cloning the repo gets the exact same build:
+
+```json
+{
+"name": "tools-cryptid-arithmetic",
+"version": "1.2.0",
+"dependencies": ["wxwidgets"],
+"builtin-baseline": "e590c2b30c08caf1dd8d612ec602a003f9784b7d"
+}
+```
+
+### Build configuration notes
+
+- **Runtime Library:** Multi-threaded DLL (`/MD`) — must match wxWidgets vcpkg triplet
+- **Whole Program Optimization:** OFF (avoids `/GL` decoration mismatches with prebuilt libs)
+- **Link Time Code Generation:** Default
+- **SubSystem:** Windows (`/SUBSYSTEM:WINDOWS`)
+- **C++ Standard:** ISO C++14 (project default; C++17 features available)
 
 ---
 
-## Screenshots
+## Lessons Learned
 
-*Coming soon — build in progress*
+Surfaced during the v1.2 build refactor — kept here for future reference:
 
----
-
-## 🗺️ Roadmap
-
-### v2.0 — Squatch Character UI *(planned)*
-- Replace wxWidgets rendering layer with SFML or SDL2
-- Animated Squatch character displayed at top of window
-- Answers delivered via speech bubble animation
-- Idle, calculating, and error reaction animations
-- Optional: rebuild as WebAssembly app for browser-based portfolio embed
+- **`/MD` vs `/MT` matters.** Mixing CRT models with a prebuilt third-party lib produces ~40 unresolved external symbol errors. Match the lib's runtime model (wxWidgets vcpkg = `/MD`).
+- **`/GL` (Whole Program Optimization)** can introduce spurious `__declspec(dllimport)` decoration mismatches when linking against `/MD` libs. Disable for clean Release builds unless every dependency was also built with `/GL`.
+- **vcpkg manifest mode** is the right answer for reproducible C++ builds. Pin a `builtin-baseline` so collaborators get byte-identical dependency versions.
+- **`dumpbin /dependents` and `dumpbin /directives`** are essential link-debugging tools. Note: anonymous object files generated by `/GL` will not show directives.
 
 ---
 
-## Part of the SquatchWorks Portfolio
+## Roadmap
 
-> This project is part of a series of progressively complex C++ and game development projects.  
-> View more at [github.com/Squatchworks](https://github.com/Squatchworks)
+### v1.2 (current release)
+- vcpkg manifest mode for reproducible builds
+- `/MD` Release build, no manual CRT linkage
+- GitHub Release ZIP + Inno Setup installer
+- Renamed binary to `CryptidArithmetic.exe`
+
+### v1.3 (next)
+- Fix C4834 + C4101 warnings
+- Add custom app icon and version-info resource (`.rc` file with `FILEVERSION 1,3,0,0`)
+- Replace `std::cout` streambuf redirect with direct `wxTextCtrl::AppendText`
+- Add `OutputDebugString` logging hooks for debug builds
+
+### v2.0 — "Squatch Companion UI" (planned)
+A reimagined UI: a compact, dockable calculator window with an animated Squatch character that delivers answers.
+
+- Small floating window mode (always-on-top option)
+- Animated Squatch character with idle / calculating / error states
+- Speech-bubble answer reveal with subtle SFX
+- Possible migration to SFML or SDL2 for richer animation
+- Stretch goal: WebAssembly port so it can be embedded on the Squatchworks portfolio site
+
+---
+
+## License
+
+[MIT](LICENSE) — free to use, fork, learn from, and remix.
+
+---
+
+## Author
+
+**Jacob Blackburn** — Gameplay programmer and C++ developer based in Russells Point, Ohio.
+- GitHub: [@Squatchworks](https://github.com/Squatchworks)
+- LinkedIn: [linkedin.com/in/squatchworks](https://linkedin.com/in/squatchworks)
