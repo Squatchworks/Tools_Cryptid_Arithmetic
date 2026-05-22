@@ -129,7 +129,7 @@ void Window::EqualButtonClicked(wxCommandEvent& evt)
 		std::cout << result;
 		evt.Skip();
 	}
-	catch (const std::exception& error)
+	catch (const std::exception&)
 	{
 		Clear();
 		TextBox->SetFocus();

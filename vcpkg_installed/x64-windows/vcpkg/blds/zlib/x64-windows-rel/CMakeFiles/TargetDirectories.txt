@@ -1,7 +1,0 @@
-E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/blds/zlib/x64-windows-rel/CMakeFiles/zlib.dir
-E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/blds/zlib/x64-windows-rel/CMakeFiles/test.dir
-E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/blds/zlib/x64-windows-rel/CMakeFiles/edit_cache.dir
-E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/blds/zlib/x64-windows-rel/CMakeFiles/rebuild_cache.dir
-E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/blds/zlib/x64-windows-rel/CMakeFiles/list_install_components.dir
-E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/blds/zlib/x64-windows-rel/CMakeFiles/install.dir
-E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/blds/zlib/x64-windows-rel/CMakeFiles/install/local.dir
