@@ -1,0 +1,8 @@
+{
+    "name": "tools-cryptid-arithmetic",
+    "version": "1.2.0",
+    "dependencies": [
+        "wxwidgets"
+    ],
+    "builtin-baseline": "e590c2b30c08caf1dd8d612ec602a003f9784b7d"
+}

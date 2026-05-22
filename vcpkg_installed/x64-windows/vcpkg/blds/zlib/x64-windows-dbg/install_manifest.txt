@@ -1,0 +1,2 @@
+E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/pkgs/zlib_x64-windows/debug/lib/zlibd.lib
+E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/pkgs/zlib_x64-windows/debug/bin/zlibd1.dll

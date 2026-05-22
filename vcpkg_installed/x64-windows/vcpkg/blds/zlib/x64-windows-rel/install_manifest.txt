@@ -1,0 +1,4 @@
+E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/pkgs/zlib_x64-windows/lib/zlib.lib
+E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/pkgs/zlib_x64-windows/bin/zlib1.dll
+E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/pkgs/zlib_x64-windows/include/zconf.h
+E:/Squatchworks/Repositories/Tools_Cryptid_Arithmetic/vcpkg_installed/x64-windows/vcpkg/pkgs/zlib_x64-windows/include/zlib.h
